@@ -104,7 +104,7 @@ public class Tablero {
 				}		
 	}
 	
-	//
+	//metodo que toma una posición dentro del tablero de juego y retorna una lista con las posiciones aledañas a esa casilla
 	private List<Casilla> retornarCasillasPerimetro (int numFila, int numColumna) {
 		List<Casilla> listaCasillas = new LinkedList<>();
 		
@@ -206,6 +206,11 @@ public class Tablero {
 	//metodo para setear el valor del consumer que avisa cuando se revela una casilla
 	public void setEventoDescubrirCasilla(Consumer<Casilla> eventoDescubrirCasilla) {
 		this.eventoDescubrirCasilla = eventoDescubrirCasilla;
+	}
+	
+	//método para retornar una copia del tablero
+	public Casilla[][] getMatrizTablero() {
+		return this.matrizTablero;
 	}
 
 }

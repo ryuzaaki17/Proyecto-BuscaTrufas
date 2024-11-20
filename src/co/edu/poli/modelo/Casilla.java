@@ -17,13 +17,10 @@ public class Casilla {
 		this.descubierta = false;
 		this.pistas = 0;
 	}
-
 	 //retorna el valor de fila
 	public int getFila() {
 		return fila;
 	}
-
-	
 	//asigna el valor de fila
 	public void setFila(int fila) {
 		this.fila = fila;
