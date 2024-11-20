@@ -14,18 +14,64 @@ public class JugadorTest {
         // Inicializa el objeto Jugador antes de cada prueba
         jugador = new Jugador("Jugador1", 3, 100.0, 50.0);
     }
+    
+    /**
+     * Prueba el constructor y los getters de la clase Jugador.
+     */
+    @Test
+    void testConstructorYGetters() {
+        assertEquals("Jugador1", jugador.getNombreJugador(), "El nombre del jugador no coincide.");
+        assertEquals(3, jugador.getNumeroVidas(), "El número de vidas no coincide.");
+        assertEquals(0.0, jugador.getPuntuacion(), "La puntuación inicial no coincide.");
+        assertEquals(0.0, jugador.getTiempoAcumulado(), "El tiempo acumulado inicial no coincide.");
+    }
+    /**
+     * Prueba el método setNombreJugador.
+     */
+    @Test
+    void testSetNombreJugador() {
+        jugador.setNombreJugador("NuevoNombre");
+        assertEquals("NuevoNombre", jugador.getNombreJugador(), "El nombre del jugador no se actualizó correctamente.");
+    }
+
+    /**
+     * Prueba el método actualizaarPuntuacion.
+     */
+    @Test
+    void testActualizaarPuntuacion() {
+        double nuevaPuntuacion = 50.0;
+        jugador.actualizarPuntuacion(nuevaPuntuacion);
+        assertEquals(50.0, jugador.getPuntuacion(), "La puntuación no se actualizó correctamente.");
+    }
+
+    /**
+     * Prueba el método restarVida.
+     */
+    @Test
+    void testRestarVida() {
+        assertTrue(jugador.restarVida(), "El jugador debería seguir vivo.");
+        assertTrue(jugador.restarVida(), "El jugador debería seguir vivo.");
+        assertTrue(jugador.restarVida(), "El jugador debería seguir vivo.");
+        assertFalse(jugador.restarVida(), "El jugador no debería tener más vidas.");
+        assertEquals(0, jugador.getNumeroVidas(), "El número de vidas no coincide.");
+    }
+
+    /**
+     * Prueba el método tiempoTurno.
+     */
+    @Test
+    void testTiempoTurno() {
+        double tiempoAgregado = 10.0;
+        jugador.tiempoTurno(tiempoAgregado);
+        assertEquals(10.0, jugador.getTiempoAcumulado(), "El tiempo acumulado no se actualizó correctamente.");
+        jugador.tiempoTurno(5.0);
+        assertEquals(15.0, jugador.getTiempoAcumulado(), "El tiempo acumulado no se actualizó correctamente.");
+    }
 
     // getNombreJugador() devuelve el nombre correcto del jugador.
     @Test
     public void testGetNombreJugador() {
         assertEquals("Jugador1", jugador.getNombreJugador());
-    }
-
-    // setNombreJugador() cambia el nombre del jugador correctamente.
-    @Test
-    public void testSetNombreJugador() {
-        jugador.setNombreJugador("NuevoNombre");
-        assertEquals("NuevoNombre", jugador.getNombreJugador());
     }
 
     // getNumeroVidas() devuelve el número correcto de vidas.
@@ -73,26 +119,4 @@ public class JugadorTest {
         double nuevaPuntuacion = jugador.actualizarPuntuacion(50.0);
         assertEquals(150.0, nuevaPuntuacion);
     }
-
-    // restarVida() resta una vida correctamente y determina si el jugador tiene vidas restantes.
-    @Test
-    public void testRestarVida() {
-        boolean tieneVidas = jugador.restarVida();
-        assertEquals(2, jugador.getNumeroVidas());
-        assertTrue(tieneVidas);
-
-        jugador.restarVida();
-        jugador.restarVida();
-        tieneVidas = jugador.restarVida();
-        assertFalse(tieneVidas);
-    }
-
-    // tiempoTurno() actualiza el tiempo acumulado del jugador correctamente.
-    @Test
-    public void testTiempoTurno() {
-        double nuevoTiempo = jugador.tiempoTurno(20.0);
-        assertEquals(70.0, nuevoTiempo);
-    }
 }
-
-
