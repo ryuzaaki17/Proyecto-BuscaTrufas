@@ -18,14 +18,20 @@ import javax.swing.border.EmptyBorder;
 import co.edu.poli.controlador.Coordinador;
 import co.edu.poli.modelo.Casilla;
 import co.edu.poli.modelo.Tablero;
+import javax.swing.JToolBar;
+import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 public class TableroJuego extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Coordinador miCoordinador;	
-	private int numFilas = 12;
-	private int numColumnas = 15;
+	private int numFilas = 6;
+	private int numColumnas = 6;
 	private int porcentajeTrufas = 20;
 	private JButton [][] tablero ;
 	private Tablero tableroModelo;
@@ -54,19 +60,55 @@ public class TableroJuego extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Juego");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem menuJuegoNuevo = new JMenuItem("Juego Nuevo");
+		
+		//evento para crear un nuevo juego desde el menu
+		menuJuegoNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nuevoJuego();
+			}
+		});
+		mnNewMenu.add(menuJuegoNuevo);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
-		
+		nuevoJuego();
+	}
+	
+	//Metodo para crear un Nuevo Juego()
+	public void nuevoJuego() {
+		limpiezaElementos();
 		cargarControles(contentPane);
 		crearTableroModelo();
 		habilidadRevelarTrufas();
+		repaint();
 	}
+	
+	//Limpieza de elementos de la pantalla al iniciar un nuevo juego
+	public void limpiezaElementos() {
+		if(this.tablero!= null) {
+			for (int i = 0; i < this.tablero.length;i++) {
+				for (int j = 0; j < this.tablero[i].length; j++) {
+					if(this.tablero[i][j] != null) {
+						getContentPane().remove(this.tablero[i][j]);
+					}
+				}
+				
+			}
+		}
+	}
+	
 	
 	//metodo para setear el objeto coordinador dentro de la clase
 	public void setCoordinador(Coordinador miCoordinador) 	{
-		this.miCoordinador =miCoordinador;
+		this.setMiCoordinador(miCoordinador);
 	}
 	/**
 	 * Create the frame.
@@ -111,6 +153,9 @@ public class TableroJuego extends JFrame {
 		                
 					}
 				}
+				//seteamos la ventana para que se vea completa sin importar la cantidad de casillas
+				//this.setSize(this.tablero[this.numFilas-1][this.numColumnas-1].getX() + this.tablero[this.numFilas-1][this.numColumnas-1].getWidth()+30,
+				//this.tablero[this.numFilas][this.numColumnas].getY() + this.tablero[this.numFilas][this.numColumnas].getHeight()+70);
 	}
 	
 	//mover al controlador despues
@@ -126,11 +171,19 @@ public class TableroJuego extends JFrame {
 				this.tablero[fila][columna].setText("*");
 			}
 		});
+		//evento al ganar el juego
+				tableroModelo.setEventoGanaJuego( (t) -> {
+					for ( Casilla casillaConTrufa : t) {
+						int fila = casillaConTrufa.getFila();
+						int columna = casillaConTrufa.getColumna();
+						this.tablero[fila][columna].setText(":)");
+					}
+				});
 		//evento al activar una casilla
 		tableroModelo.setEventoDescubrirCasilla( (t) -> {
 			Casilla casilla = t;
 			this.tablero[casilla.getFila()][casilla.getColumna()].setEnabled(false);
-			this.tablero[casilla.getFila()][casilla.getColumna()].setText(casilla.getPistas()+"");
+			this.tablero[casilla.getFila()][casilla.getColumna()].setText(casilla.getPistas()==0?"":casilla.getPistas()+"");
 		});
 		tableroModelo.imprimirTableroConsola();
 		
@@ -176,5 +229,9 @@ public class TableroJuego extends JFrame {
 	        System.out.println("Boton clickeado en posicion: (" + numFila + ", " + numColumna + ")");
 	        this.tableroModelo.casillaSeleccionada(numFila, numColumna);
 	 }
+
+	public void setMiCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;
+	}
 
 }

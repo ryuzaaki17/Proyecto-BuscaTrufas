@@ -14,10 +14,15 @@ public class Tablero {
 	private int numFilas; //cantidad de filas que contiene el tablero
 	private int numColumnas; //cantidad de columnas que contiene el tablero
 	private int numTrufas; //cantidad de trufas envenenadas en valor entero que debe tener nuestro tablero
+	private boolean juegoTerminado; //Bandera que determina cuando el juego se haya acabado
+	private int numCasillasAbiertas; //cantidad de casillas activadas en el juego
 	
-	private List<Casilla> trufasEnvenenadas = new LinkedList<>(); //lista que contiene todas las casillas donde hay una trufa enveneada
+	private List<Casilla> trufasEnvenenadas = new LinkedList<>(); //lista que contiene todas las casillas donde hay una trufa envenenada
+	
 
 	private Consumer<List<Casilla>> eventoPierdeJuego;
+	
+	private Consumer<List<Casilla>> eventoGanaJuego;
 	
 	private Consumer<Casilla> eventoDescubrirCasilla;
 
@@ -167,25 +172,52 @@ public class Tablero {
 		this.eventoDescubrirCasilla.accept(this.matrizTablero[numFila][numColumna]);
 		//ejecutamos el evento de perder juego y retornamos la lista con todas la casillas envenenadas
 		if (this.matrizTablero[numFila][numColumna].isTrufa()){
-			eventoPierdeJuego.accept(this.trufasEnvenenadas);
+			this.eventoPierdeJuego.accept(this.trufasEnvenenadas);
 		}
 		//flujo cuando se abre una casilla que no tiene minas alrededor (Pistas 0), se debe abrir todo alrededor con recursividad
 		else if (this.matrizTablero[numFila][numColumna].getPistas()==0) {
+			//llevar el conteo de casillas abiertas para determinar cuando acaba el juego
+			marcarCasillaAbierta(numFila,numColumna);
 			List<Casilla> casillasAlrededor = retornarCasillasPerimetro(numFila,numColumna);
 			for (Casilla casilla: casillasAlrededor) {
 				if(!casilla.isDescubierta()) {
-					casilla.setDescubierta(true);
+					//casilla.setDescubierta(true);
 					casillaSeleccionada(casilla.getFila(),casilla.getColumna());
 				}
 			}
 			
+		}else {
+			//llevar el conteo de casillas abiertas para determinar cuando acaba el juego
+			marcarCasillaAbierta(numFila,numColumna);
+		}
+		//validamos si despues de seleccionar la casilla, se acabó el juego
+		if (partidaGanada()) {
+			this.eventoGanaJuego.accept(this.trufasEnvenenadas);
+		}
+	}
+	
+	//metodo que incrementa la cantidad de casillas abiertas para determinar cuando el juego termine
+	void marcarCasillaAbierta(int numFila, int numColumna) {
+		if(!this.matrizTablero[numFila][numColumna].isDescubierta()) {
+			this.numCasillasAbiertas++;
+			this.matrizTablero[numFila][numColumna].setDescubierta(true);
 		}
 	}
 	
 	
+	//metodo a ejecutar cuando el juego ha terminado
+	boolean partidaGanada() {
+		return this.numCasillasAbiertas >= (this.numFilas * this.numColumnas) - this.numTrufas;
+	}
+	
 	
 	
 	//GETTERS Y SETTERS
+	
+	//metodo para setear el valor del consumer que avisa cuando se gana el juego
+	public void setEventoGanaJuego(Consumer<List<Casilla>> eventoGanaJuego) {
+		this.eventoGanaJuego = eventoGanaJuego;
+	}
 	
 	//metodo para setear el valor del consumer que avisa cuando se pierde el juego
 	public void setEventoPierdeJuego(Consumer<List<Casilla>> eventoPierdeJuego) {
