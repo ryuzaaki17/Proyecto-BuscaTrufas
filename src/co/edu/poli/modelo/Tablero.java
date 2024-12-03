@@ -227,7 +227,7 @@ public class Tablero {
 
 	//metodo para setear el objeto coordinador dentro de la clase
 	public void setCoordinador(Coordinador miCoordinador) 	{
-		this.miCoordinador = miCoordinador;
+		this.setMiCoordinador(miCoordinador);
 	}
 	
 	//retorna el array de trufas envenenadas
@@ -243,6 +243,14 @@ public class Tablero {
 	//método para retornar una copia del tablero
 	public Casilla[][] getMatrizTablero() {
 		return this.matrizTablero;
+	}
+
+	public Coordinador getMiCoordinador() {
+		return miCoordinador;
+	}
+
+	public void setMiCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;
 	}
 
 }

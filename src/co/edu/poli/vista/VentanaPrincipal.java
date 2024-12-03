@@ -10,6 +10,9 @@ import javax.swing.JSlider;
 import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import co.edu.poli.controlador.Coordinador;
+
 import javax.swing.border.EmptyBorder;
 
 public class VentanaPrincipal extends JFrame {
@@ -26,6 +29,8 @@ public class VentanaPrincipal extends JFrame {
     private JTextField nombreJugadorTextField;
     private JTextField nombreJugador1TextField;
     private JTextField nombreJugador2TextField;
+    
+    private Coordinador miCoordinador = new Coordinador();
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -141,6 +146,8 @@ public class VentanaPrincipal extends JFrame {
                 int columnas = Integer.parseInt(columnasTextField.getText());
                 int porcentaje = porcentajeSlider.getValue();
                 JOptionPane.showMessageDialog(null, "Configuración aceptada para " + nombre + ": Filas: " + filas + ", Columnas: " + columnas + ", Porcentaje: " + porcentaje);
+                miCoordinador.CrearJuego1(nombre, filas, columnas, porcentaje);
+                
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Por favor, ingrese valores válidos.");
             }
@@ -265,4 +272,9 @@ public class VentanaPrincipal extends JFrame {
         configuracionPanelDosJugadores.setVisible(false);
         Menu.setVisible(true);
     }
+
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;
+		
+	}
 }

@@ -1,5 +1,7 @@
 package co.edu.poli.modelo;
 
+import co.edu.poli.controlador.Coordinador;
+
 /**
  * Clase que representa a un jugador en el juego BuscaTrufas.
  * Cada jugador tiene un nombre, un número de vidas, una puntuación acumulada
@@ -10,6 +12,7 @@ public class Jugador {
     private int numeroVidas;
     private double puntuacion;
     private double tiempoAcumulado;
+    private Coordinador miCoordinador = new Coordinador();
 
     /**
      * Constructor de la clase Jugador.
@@ -97,6 +100,13 @@ public class Jugador {
     public void setTiempoAcumulado(double tiempoAcumulado) {
         this.tiempoAcumulado = tiempoAcumulado;
     }
+    
+    /**
+     * Incrementa el tiempo acumulado en 1 segundo
+     */
+    public void IncrementaTiempoAcumulado(double tiempo) {
+        this.tiempoAcumulado += tiempoAcumulado;
+    }
 
     /**
      * Actualiza la puntuación del jugador sumando una nueva puntuación.
@@ -130,4 +140,9 @@ public class Jugador {
         tiempoAcumulado += nuevoTiempo;
         return tiempoAcumulado;
     }
+
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;
+		
+	}
 }
